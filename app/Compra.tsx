@@ -12,7 +12,6 @@ import lista from "@/dados/lista";
 const Compra = () => {
   const [selecionados, setSelecionados] = useState<number[]>([]);
 
-  // Cria estrutura filtrada com base nos itens da lista
   const dispensaFiltrada = useMemo(() => {
     const idsNaLista = lista.map((item) => item.id);
 
