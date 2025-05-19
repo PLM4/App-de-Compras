@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   SectionList,
   Text,
@@ -6,10 +6,37 @@ import {
   StyleSheet,
 } from "react-native";
 import { Checkbox } from "react-native-paper";
-import dispensa from "@/dados/dispensa";
+import dispensaOriginal from "@/dados/dispensa";
+import lista from "@/dados/lista";
 
 const Compra = () => {
   const [selecionados, setSelecionados] = useState<number[]>([]);
+
+  // Cria estrutura filtrada com base nos itens da lista
+  const dispensaFiltrada = useMemo(() => {
+    const idsNaLista = lista.map((item) => item.id);
+
+    return dispensaOriginal
+      .map((secao) => {
+        const itensFiltrados = secao.data
+          .filter((item) => idsNaLista.includes(item.id))
+          .map((item) => {
+            const itemLista = lista.find((l) => l.id === item.id);
+            return {
+              ...item,
+              qtd: itemLista?.qtd || 1,
+            };
+          });
+
+        if (itensFiltrados.length === 0) return null;
+
+        return {
+          nome: secao.nome,
+          data: itensFiltrados,
+        };
+      })
+      .filter(Boolean) as { nome: string; data: { id: number; nome: string; qtd: number }[] }[];
+  }, []);
 
   const toggleSelecionado = (id: number) => {
     setSelecionados((prev) =>
@@ -22,7 +49,7 @@ const Compra = () => {
       <Text style={styles.titulo}>Compra</Text>
 
       <SectionList
-        sections={dispensa}
+        sections={dispensaFiltrada}
         keyExtractor={(item) => item.id.toString()}
         renderSectionHeader={({ section }) => (
           <View style={styles.headerSecao}>
@@ -42,7 +69,9 @@ const Compra = () => {
               color="#007AFF"
               uncheckedColor="#aaa"
             />
-            <Text style={styles.itemTexto}>{item.nome}</Text>
+            <Text style={styles.itemTexto}>
+              {item.nome} ({item.qtd})
+            </Text>
           </View>
         )}
         contentContainerStyle={{ paddingBottom: 32 }}
@@ -89,5 +118,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-
