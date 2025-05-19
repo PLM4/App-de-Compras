@@ -1,12 +1,13 @@
+import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
-import { SectionList, StyleSheet, Text, View } from "react-native";
+import { Button, SectionList, StyleSheet, Text, View } from "react-native";
 import dispensa from "../dados/dispensa";
 
 interface ItemProps {
   nome: string
 }
 
-interface SectionHeaderProps{
+interface SectionHeaderProps{ 
   title: string,
   count: number,
 }
@@ -23,7 +24,16 @@ interface Section {
 
 const Item: React.FC<ItemProps> = ({ nome }) => (
   <View style={styles.itemContainer}>
+    <View style={styles.iconsContainer}>
+      <Feather name="edit-2" size={24} color="black" />
+      <Feather name="trash-2" size={24} color="black" />
+    </View>
     <Text style={styles.itemText}>{nome}</Text>
+    <View style={styles.quantityContainer}>
+      <Button title="-" />
+      <Text style={styles.quantityText}>0</Text>
+      <Button title="+" />
+    </View>
   </View>
 );
 
@@ -61,11 +71,14 @@ const styles = StyleSheet.create({
     },
 
     itemContainer: {
+      flexDirection: 'row',  
+      alignItems: 'center', 
+      justifyContent: 'space-between',  
       paddingVertical: 12,
       paddingHorizontal: 16,
       backgroundColor: '#F8F9FA',
       borderRadius: 6,
-      marginVertical: 4,  
+      marginVertical: 4,
     },
 
     sectionHeader: {
@@ -93,6 +106,24 @@ const styles = StyleSheet.create({
  
     itemText: {
       fontSize: 16,
-      color: '#333'
-    }
+      color: '#333',
+      flex: 1,
+      marginHorizontal: 8,
+    },
+
+    iconsContainer: {
+      flexDirection: 'row',
+      gap: 16
+    },
+    quantityContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+
+    quantityText: {
+      fontSize: 16,
+      minWidth: 24,
+      textAlign: 'center',
+    },
 }); 
