@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-export default function Lista() {
+const Lista = () => {
   return (
     <View
       style={{
@@ -13,3 +13,5 @@ export default function Lista() {
     </View>
   );
 }
+
+export default Lista;
